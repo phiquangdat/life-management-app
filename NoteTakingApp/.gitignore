@@ -1,0 +1,75 @@
+### Visual Studio and IDE
+.vs/
+.vscode/
+.idea/
+
+### User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+### Build outputs
+bin/
+obj/
+**/bin/**
+**/obj/**
+
+### NuGet
+*.nupkg
+# The packages folder can be ignored because of PackageReference
+**/packages/*
+
+### OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+### Logs and databases
+*.log
+*.sql
+*.sqlite
+*.db
+
+### Certificates
+*.pfx
+*.p12
+
+### Temporary files
+*.tmp
+*.temp
+~$*
+
+### Xamarin / MAUI / Mobile
+*.apk
+*.apks
+*.aab
+*.ipa
+*.app
+*.dSYM
+*.symbols
+*.keystore
+*.keystore.jks
+
+### iOS / Xcode
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+### Android
+gradle-app.setting
+
+### Rider/IDE caches
+*.sln.iml
+
+# Ignore compiled binaries and native libs that can appear in MAUI outputs
+*.dll
+*.so
+*.dylib
+*.framework
+
+# End of .gitignore
+.vs/
