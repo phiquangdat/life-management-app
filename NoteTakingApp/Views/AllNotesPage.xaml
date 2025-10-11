@@ -1,70 +1,120 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="NoteTakingApp.Views.AllNotesPage"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="My Notes">
+             x:Class="NoteTakingApp.Views.AllNotesPage"
+             Title="My Notes"
+             BackgroundColor="#FF8B819D">
 
-    <Grid>
+    <Grid Padding="20,30,20,30">
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Add Note Button -->
-        <Button Grid.Row="0"
-                Text="Add Note"
-                FontSize="18"
-                Margin="20,20,20,10"
-                BackgroundColor="#007ACC"
-                TextColor="White"
-                Clicked="OnAddNoteClicked" />
+        <!-- Notes List with Modern Card Design -->
+        <ScrollView Grid.Row="0">
+            <CollectionView x:Name="NotesCollection"
+                            ItemsSource="{Binding Notes}"
+                            SelectionMode="Single"
+                            SelectionChanged="OnNoteSelected">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="#E0E0E0"
+                                StrokeThickness="1"
+                                Margin="0,0,0,16"
+                                Padding="20,16">
+                            <Border.Shadow>
+                                <Shadow Brush="Black"
+                                        Opacity="0.08"
+                                        Radius="8"
+                                        Offset="0,2" />
+                            </Border.Shadow>
+                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                
+                                <!-- Note Title -->
+                                <Label Grid.Row="0"
+                                       Text="{Binding Filename}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="#1A1A1A"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="2" />
+                                
+                                <!-- Note Date with Icon -->
+                                <HorizontalStackLayout Grid.Row="1"
+                                                       Spacing="8"
+                                                       Margin="0,8,0,0">
+                                    <Label Text="{Binding Date, StringFormat='{0:MMM dd, yyyy} at {0:HH:mm}'}"
+                                           FontSize="14"
+                                           TextColor="#6C757D"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
 
-        <!-- Notes List -->
-        <CollectionView Grid.Row="1"
-                        x:Name="NotesCollection"
-                        ItemsSource="{Binding Notes}"
-                        SelectionMode="Single"
-                        SelectionChanged="OnNoteSelected">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="20,10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        
-                        <!-- Note Title (using filename) -->
-                        <Label Grid.Row="0"
-                               Text="{Binding Filename}"
-                               FontSize="16"
-                               FontAttributes="Bold"
-                               TextColor="Black" />
-                        
-                        <!-- Note Date -->
-                        <Label Grid.Row="1"
-                               Text="{Binding Date, StringFormat='{0:MMM dd, yyyy HH:mm}'}"
-                               FontSize="12"
-                               TextColor="Gray"
-                               Margin="0,5,0,0" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <!-- Empty State -->
-        <StackLayout Grid.Row="1"
-                     IsVisible="{Binding IsEmpty}"
-                     VerticalOptions="Center"
-                     HorizontalOptions="Center">
-            <Label Text="No notes yet"
-                   FontSize="18"
-                   TextColor="Gray"
+        <!-- Enhanced Empty State -->
+        <VerticalStackLayout Grid.Row="0"
+                             IsVisible="{Binding IsEmpty}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="20">
+            
+            <!-- Empty State Icon -->
+            <Label Text="📝"
+                   FontSize="64"
                    HorizontalOptions="Center" />
-            <Label Text="Tap 'Add Note' to create your first note"
-                   FontSize="14"
-                   TextColor="Gray"
-                   HorizontalOptions="Center"
-                   Margin="0,10,0,0" />
-        </StackLayout>
+            
+            <!-- Empty State Messages -->
+            <VerticalStackLayout Spacing="8"
+                                 HorizontalOptions="Center">
+                <Label Text="No notes yet"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="#1A1A1A"
+                       HorizontalOptions="Center" />
+                <Label Text="Tap the button below to create your first note"
+                       FontSize="16"
+                       TextColor="#6C757D"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       MaximumWidthRequest="280" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        <!-- Modern Floating Action Button -->
+        <Border Grid.Row="1"
+                BackgroundColor="#28A745"
+                StrokeShape="RoundRectangle 25"
+                Stroke="Transparent"
+                Padding="0"
+                HorizontalOptions="Center"
+                Margin="0,20,0,0">
+            <Border.Shadow>
+                <Shadow Brush="Black"
+                        Opacity="0.2"
+                        Radius="12"
+                        Offset="0,4" />
+            </Border.Shadow>
+            
+            <Button Text="✚  Add New Note"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BackgroundColor="Transparent"
+                    Clicked="OnAddNoteClicked"
+                    Padding="40,16"
+                    HeightRequest="50" />
+        </Border>
     </Grid>
 </ContentPage>

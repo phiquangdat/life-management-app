@@ -2,49 +2,114 @@
 <ContentPage x:Class="NoteTakingApp.Views.NotePage"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="Note">
+             Title="Note"
+             BackgroundColor="#F8F9FA">
 
-    <Grid>
+    <Grid Padding="40,30"
+          RowSpacing="20"
+          VerticalOptions="CenterAndExpand">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Title Entry -->
-        <Entry Grid.Row="0"
-               x:Name="TitleEntry"
-               Placeholder="Note title..."
-               FontSize="18"
-               Margin="20,20,20,10"
-               BackgroundColor="LightGray" />
+        <!-- Title Section with Card Style -->
+        <Border Grid.Row="0"
+                BackgroundColor="White"
+                Stroke="#E0E0E0"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 12"
+                Padding="16,12"
+                Margin="0,0,0,20">
+            <Entry x:Name="TitleEntry"
+                   Placeholder="Enter note title..."
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#1A1A1A"
+                   PlaceholderColor="#9E9E9E"
+                   BackgroundColor="Transparent" 
+                   CursorPosition="0"
+                   IsTextPredictionEnabled="True"
+                   />
+        </Border>
 
-        <!-- Note Editor -->
-        <Editor Grid.Row="1"
-                x:Name="NoteEditor"
-                Placeholder="Start writing your note..."
-                FontSize="16"
-                Margin="20,0,20,10"
-                BackgroundColor="White" />
-
-        <!-- Action Buttons -->
-        <Grid Grid.Row="2" ColumnDefinitions="*,*">
-            <Button Grid.Column="0"
-                    Text="Delete"
+        <!-- Note Editor with Enhanced Card Design -->
+        <Border Grid.Row="1"
+                BackgroundColor="White"
+                Stroke="#E0E0E0"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 12"
+                Padding="16"
+                Margin="0,0,0,20">
+            <Border.Shadow>
+                <Shadow Brush="Black"
+                        Opacity="0.05"
+                        Radius="8"
+                        Offset="0,2" />
+            </Border.Shadow>
+            
+            <Editor x:Name="NoteEditor"
+                    Placeholder="Start writing your note..."
+                    TextColor="#1A1A1A"
+                    PlaceholderColor="#9E9E9E"
                     FontSize="16"
-                    Margin="20,10,10,20"
-                    BackgroundColor="#DC3545"
-                    TextColor="White"
-                    IsVisible="{Binding IsExistingNote}"
-                    Clicked="OnDeleteClicked" />
+                    BackgroundColor="Transparent"
+                    AutoSize="TextChanges"
+                    CursorPosition="0"
+                    IsTextPredictionEnabled="True"
+                    MinimumHeightRequest="150"
+                    MaximumHeightRequest="300" />
+        </Border>
 
-            <Button Grid.Column="1"
-                    Text="Save"
-                    FontSize="16"
-                    Margin="10,10,20,20"
+        <!-- Action Buttons with Modern Design -->
+        <Grid Grid.Row="2" 
+              ColumnDefinitions="*,*"
+              ColumnSpacing="16">
+            
+            <!-- Cancel Button -->
+            <Border Grid.Column="0"
+                    BackgroundColor="#6C757D"
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="Transparent"
+                    Padding="0">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.1"
+                            Radius="6"
+                            Offset="0,2" />
+                </Border.Shadow>
+                
+                <Button Text="Cancel"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Clicked="OnCancelClicked"
+                        HeightRequest="50" />
+            </Border>
+
+            <!-- Save Button -->
+            <Border Grid.Column="1"
                     BackgroundColor="#28A745"
-                    TextColor="White"
-                    Clicked="OnSaveClicked" />
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="Transparent"
+                    Padding="0">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.15"
+                            Radius="8"
+                            Offset="0,3" />
+                </Border.Shadow>
+                
+                <Button Text="Save"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Clicked="OnSaveClicked"
+                        HeightRequest="50" />
+            </Border>
         </Grid>
     </Grid>
 </ContentPage>

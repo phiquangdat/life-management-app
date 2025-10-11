@@ -38,6 +38,12 @@
 		<CodesignKey Condition="'$(Configuration)' == 'Debug'"></CodesignKey>
 		<CodesignProvision Condition="'$(Configuration)' == 'Debug'"></CodesignProvision>
 		<EnableCodeSigning Condition="'$(Configuration)' == 'Debug'">false</EnableCodeSigning>
+		
+		<!-- Hot Reload Configuration -->
+		<UseHotReload Condition="'$(Configuration)' == 'Debug'">true</UseHotReload>
+		<HotReloadProfile>maui</HotReloadProfile>
+		<EnableHotReload Condition="'$(Configuration)' == 'Debug'">true</EnableHotReload>
+		
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>

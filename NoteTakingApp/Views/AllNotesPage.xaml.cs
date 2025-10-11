@@ -50,7 +50,8 @@ public partial class AllNotesPage : ContentPage, INotifyPropertyChanged
                 {
                     Filename = filename,
                     Text = await File.ReadAllTextAsync(file),
-                    Date = fileInfo.CreationTime
+                    // Use LastWriteTime so edits update ordering
+                    Date = fileInfo.LastWriteTime
                 };
                 
                 Notes.Add(note);
