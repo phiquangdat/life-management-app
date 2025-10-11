@@ -17,7 +17,12 @@ public partial class NotePage : ContentPage, INotifyPropertyChanged
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        TitleEntry.Focus();
+        
+        // Only load if we haven't already loaded this note
+        if (string.IsNullOrEmpty(_filename))
+        {
+            TitleEntry.Focus();
+        }
         
         // Get the filename from query parameters
         var route = Shell.Current.CurrentState.Location.ToString();
@@ -32,12 +37,24 @@ public partial class NotePage : ContentPage, INotifyPropertyChanged
                 var parts = param.Split('=');
                 if (parts.Length == 2 && parts[0] == "filename")
                 {
-                    _filename = Uri.UnescapeDataString(parts[1]);
-                    OnPropertyChanged(nameof(IsExistingNote));
+                    var newFilename = Uri.UnescapeDataString(parts[1]);
                     
-                    if (!string.IsNullOrEmpty(_filename))
+                    // Only reload if filename changed
+                    if (_filename != newFilename)
                     {
-                        await LoadExistingNote();
+                        _filename = newFilename;
+                        OnPropertyChanged(nameof(IsExistingNote));
+                        
+                        if (!string.IsNullOrEmpty(_filename))
+                        {
+                            await LoadExistingNote();
+                        }
+                        else
+                        {
+                            // Clear fields for new note
+                            TitleEntry.Text = string.Empty;
+                            NoteEditor.Text = string.Empty;
+                        }
                     }
                     break;
                 }
@@ -54,14 +71,24 @@ public partial class NotePage : ContentPage, INotifyPropertyChanged
 
             if (File.Exists(filePath))
             {
+                // Force a fresh read from the file system
                 var content = await File.ReadAllTextAsync(filePath);
                 TitleEntry.Text = _filename;
                 NoteEditor.Text = content;
+                
+                // Ensure the UI is updated
+                TitleEntry.Focus();
+            }
+            else
+            {
+                await DisplayAlert("Error", $"Note file not found: {_filename}", "OK");
+                await Shell.Current.GoToAsync("..");
             }
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", $"Failed to load note: {ex.Message}", "OK");
+            await Shell.Current.GoToAsync("..");
         }
     }
     
