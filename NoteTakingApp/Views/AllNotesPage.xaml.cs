@@ -14,7 +14,6 @@ public partial class AllNotesPage : ContentPage, INotifyPropertyChanged
     {
         InitializeComponent();
         BindingContext = this;
-        LoadNotes();
     }
 
     protected override void OnAppearing()
@@ -29,7 +28,6 @@ public partial class AllNotesPage : ContentPage, INotifyPropertyChanged
         {
             // Clear existing notes
             Notes.Clear();
-            OnPropertyChanged(nameof(IsEmpty));
             
             // Get the app's data directory
             var appDataPath = Path.Combine(FileSystem.AppDataDirectory, "Notes");
@@ -38,7 +36,6 @@ public partial class AllNotesPage : ContentPage, INotifyPropertyChanged
             if (!Directory.Exists(appDataPath))
             {
                 Directory.CreateDirectory(appDataPath);
-                return;
             }
 
             // Load all note files

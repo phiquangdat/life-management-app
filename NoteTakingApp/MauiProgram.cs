@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using NoteTakingApp.ViewModels;
 using NoteTakingApp.Views;
 
 namespace NoteTakingApp
@@ -16,13 +16,8 @@ namespace NoteTakingApp
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
-
-            // Register pages for dependency injection
+            builder.Services.AddSingleton<AllNotesViewModel>();
             builder.Services.AddSingleton<AllNotesPage>();
-            builder.Services.AddTransient<NotePage>();
 
             return builder.Build();
         }
