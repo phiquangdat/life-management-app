@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NoteTakingApp.Models;
 using NoteTakingApp.Views;
@@ -7,68 +8,75 @@ namespace NoteTakingApp.ViewModels;
 
 public partial class AllNotesViewModel : BaseViewModel
 {
-  public ObservableCollection<Note> Notes { get; } = new();
+    public ObservableCollection<Note> Notes { get; } = new();
 
-  public AllNotesViewModel()
-  {
-    LoadNotes();
-  }
+    [ObservableProperty]
+    private bool _isEmpty;
 
-  [RelayCommand]
-  private async Task LoadNotes()
-  {
-    try
+    public AllNotesViewModel()
     {
-      Notes.Clear();
-      var appDataPath = Path.Combine(FileSystem.AppDataDirectory, "Notes");
-      if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
-
-      var noteFiles = Directory.GetFiles(appDataPath, "*.txt");
-      var notesList = new List<Note>();
-
-      foreach (var file in noteFiles)
-      {
-        var fileInfo = new FileInfo(file);
-        notesList.Add(new Note
-        {
-          Filename = Path.GetFileNameWithoutExtension(file),
-          Text = await File.ReadAllTextAsync(file),
-          Date = fileInfo.LastWriteTime
-        });
-      }
-
-      var sortedNotes = notesList.OrderByDescending(n => n.Date);
-      foreach (var note in sortedNotes)
-      {
-        Notes.Add(note);
-      }
+        Notes.CollectionChanged += (s, e) => IsEmpty = Notes.Count == 0;
     }
-    catch (Exception ex)
+
+    [RelayCommand]
+    private async Task LoadNotes()
     {
-      await Shell.Current.DisplayAlert("Error", $"Failed to load notes: {ex.Message}", "OK");
-    }
-  }
-
-  private async Task GoToAddNote()
-  {
-    await Shell.Current.GoToAsync(nameof(NotePage));
-  }
-  private async Task GoToNote(Note note)
-  {
-    await Shell.Current.GoToAsync(nameof(NotePage));
-  }
-    private async Task DeleteNote(Note note)
-  {
-    if (note == null) return;
-    var result = await Shell.Current.DisplayAlert("Delete Note", $"Delete, '{note.Filename}'?", "Yes", "No");
-    if(result)
+        try
         {
-      Notes.Remove(note);
-      var filePath = Path.Combine(FileSystem.AppDataDirectory, "Notes", $"{note.Filename}.txt");
-      if (File.Exists(filePath))
+            Notes.Clear();
+            var appDataPath = Path.Combine(FileSystem.AppDataDirectory, "Notes");
+            if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
+
+            var noteFiles = Directory.GetFiles(appDataPath, "*.txt");
+            var notesList = new List<Note>();
+
+            foreach (var file in noteFiles)
             {
-        File.Delete(filePath);
+                var fileInfo = new FileInfo(file);
+                notesList.Add(new Note
+                {
+                    Filename = Path.GetFileNameWithoutExtension(file),
+                    Text = await File.ReadAllTextAsync(file),
+                    Date = fileInfo.LastWriteTime
+                });
             }
+
+            var sortedNotes = notesList.OrderByDescending(n => n.Date);
+            foreach (var note in sortedNotes)
+            {
+                Notes.Add(note);
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"Failed to load notes: {ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task GoToAddNote()
+    {
+        // Pass an empty filename to indicate a new note.
+        await Shell.Current.GoToAsync($"{nameof(NotePage)}?Filename=");
+    }
+
+    [RelayCommand]
+    private async Task GoToNote(Note note)
+    {
+        if (note == null) return;
+        await Shell.Current.GoToAsync($"{nameof(NotePage)}?Filename={Uri.EscapeDataString(note.Filename)}");
+    }
+
+    [RelayCommand]
+    private async Task DeleteNote(Note note)
+    {
+        if (note == null) return;
+
+        if (await Shell.Current.DisplayAlert("Delete Note", $"Delete '{note.Filename}'?", "Yes", "No"))
+        {
+            var filePath = Path.Combine(FileSystem.AppDataDirectory, "Notes", $"{note.Filename}.txt");
+            if (File.Exists(filePath)) File.Delete(filePath);
+            Notes.Remove(note);
         }
     }
 }

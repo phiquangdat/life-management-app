@@ -1,25 +1,38 @@
-﻿using NoteTakingApp.ViewModels;
+﻿using CommunityToolkit.Maui;
+using NoteTakingApp.ViewModels;
 using NoteTakingApp.Views;
 
-namespace NoteTakingApp
+namespace NoteTakingApp;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            // Initialize the .NET MAUI Community Toolkit, which is needed for MVVM features
+            .UseMauiCommunityToolkit()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
 
-            builder.Services.AddSingleton<AllNotesViewModel>();
-            builder.Services.AddSingleton<AllNotesPage>();
+        // --- Dependency Injection Setup ---
 
-            return builder.Build();
-        }
+        // Singleton services are created once for the entire app lifetime.
+        // This is suitable for your main page and its ViewModel.
+        builder.Services.AddSingleton<AllNotesViewModel>();
+        builder.Services.AddSingleton<AllNotesPage>();
+
+        // Transient services are created fresh every time they are needed.
+        // This is essential for the note editing page, so you get a
+        // clean, new instance each time you create or edit a note.
+        builder.Services.AddTransient<NoteViewModel>();
+        builder.Services.AddTransient<NotePage>();
+
+        return builder.Build();
     }
 }
+
