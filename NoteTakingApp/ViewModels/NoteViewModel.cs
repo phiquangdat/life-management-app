@@ -29,7 +29,7 @@ public partial class NoteViewModel : BaseViewModel
         {
             if (string.IsNullOrEmpty(filename))
             {
-                Title = "New Note";
+                Title = string.Empty;
                 Text = string.Empty;
             }
             else

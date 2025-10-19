@@ -5,7 +5,7 @@
              x:DataType="viewmodels:NoteViewModel"
              x:Class="NoteTakingApp.Views.NotePage"
              Title="{Binding Title}"
-             BackgroundColor="#FF36516B">
+             BackgroundColor="White">
 
     <Grid Padding="30" RowSpacing="20">
         <Grid.RowDefinitions>
@@ -18,6 +18,7 @@
         <Border Grid.Row="0" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#FF060404" Padding="10,5" Margin="0,10,0,0">
             <Entry Placeholder="Enter note title..."
                    Text="{Binding Title}"
+                   TextColor="#FF4F13A2"
                    FontSize="20"
                    FontAttributes="Bold" />
         </Border>
@@ -26,6 +27,7 @@
         <Border Grid.Row="1" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="Black" Padding="10">
             <Editor Placeholder="Start writing your note..."
                     Text="{Binding Text}"
+                    TextColor="#FF0D800D"
                     FontSize="16"
                     AutoSize="TextChanges" />
         </Border>
