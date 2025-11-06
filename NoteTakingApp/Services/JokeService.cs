@@ -31,11 +31,17 @@ namespace NoteTakingApp.Services
                 {
                     return jokeElement.GetString() ?? string.Empty;
                 }
+                else if (doc.RootElement.TryGetProperty("setup", out var setupElement) &&
+                         doc.RootElement.TryGetProperty("delivery", out var deliveryElement))
+                {
+                    // Handle two-part jokes
+                    return $"{setupElement.GetString()}... {deliveryElement.GetString()}";
+                }
 
-                return string.Empty;
-            } catch
+                return "Could not find a joke in the response.";
+            } catch (Exception ex)
             {
-                return string.Empty;
+                return $"Failed to get joke: {ex.Message}";
             }
         }
     }

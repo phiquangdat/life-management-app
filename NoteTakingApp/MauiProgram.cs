@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using NoteTakingApp.ViewModels;
 using NoteTakingApp.Views;
+using NoteTakingApp.Services;
 
 namespace NoteTakingApp;
 
@@ -20,6 +21,9 @@ public static class MauiProgram
             });
 
         // --- Dependency Injection Setup ---
+        builder.Services.AddHttpClient();
+
+        builder.Services.AddSingleton<IJokeService, JokeService>();
 
         // Singleton services are created once for the entire app lifetime.
         // This is suitable for your main page and its ViewModel.

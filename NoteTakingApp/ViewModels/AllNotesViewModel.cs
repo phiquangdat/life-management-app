@@ -3,19 +3,25 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NoteTakingApp.Models;
 using NoteTakingApp.Views;
+using NoteTakingApp.Services;
 
 namespace NoteTakingApp.ViewModels;
 
 public partial class AllNotesViewModel : BaseViewModel
 {
+    private readonly IJokeService _jokeService;
+    [ObservableProperty]
+    private string _jokeOfTheDay = "Loading joke...";
     public ObservableCollection<Note> Notes { get; } = new();
 
     [ObservableProperty]
     private bool _isEmpty;
 
-    public AllNotesViewModel()
+    public AllNotesViewModel(IJokeService jokeService)
     {
+        _jokeService = jokeService;
         Notes.CollectionChanged += (s, e) => IsEmpty = Notes.Count == 0;
+        GetJokeCommand.Execute(null);
     }
 
     [RelayCommand]
@@ -50,6 +56,22 @@ public partial class AllNotesViewModel : BaseViewModel
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlert("Error", $"Failed to load notes: {ex.Message}", "OK");
+        }
+    }
+
+
+
+    [RelayCommand]
+    private async Task GetJoke()
+    {
+        JokeOfTheDay = "Finding a new joke...";
+        try
+        {
+            JokeOfTheDay = await _jokeService.GetProgrammingJokeAsync();
+        }
+        catch (Exception ex)
+        {
+            JokeOfTheDay = $"Failed to load joke: {ex.Message}";
         }
     }
 
