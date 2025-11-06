@@ -6,44 +6,137 @@
              x:DataType="viewModels:AllNotesViewModel"
              x:Class="NoteTakingApp.Views.AllNotesPage"
              Title="My Notes"
-             BackgroundColor="#F0F2F5">
+             BackgroundColor="#F5F7FA">
 
-    <Grid RowDefinitions="*,Auto">
+    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="0">
+        
+        <Border Grid.Row="0" 
+                StrokeThickness="0" 
+                BackgroundColor="White" 
+                Padding="20" 
+                Margin="15,15,15,10">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.08" Radius="15" Offset="0,2" />
+            </Border.Shadow>
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16" />
+            </Border.StrokeShape>
+            
+            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="12">
+                <Label Grid.Row="0" 
+                       Text="💡 Joke of the Day" 
+                       FontSize="16" 
+                       FontAttributes="Bold" 
+                       TextColor="#2C3E50" />
+                
+                <Label Grid.Row="1" 
+                       Text="{Binding JokeOfTheDay}" 
+                       FontSize="14" 
+                       LineHeight="1.4"
+                       TextColor="#5A6C7D" />
+                
+                <Button Grid.Row="2" 
+                        Text="Get New Joke" 
+                        Command="{Binding GetJokeCommand}" 
+                        HorizontalOptions="Start"
+                        BackgroundColor="#3498DB"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Padding="16,8"
+                        FontSize="13"
+                        FontAttributes="Bold" />
+            </Grid>
+        </Border>
 
-        <CollectionView Grid.Row="0"
+        <!-- Notes Collection -->
+        <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Notes}"
-                        SelectionMode="None">
+                        SelectionMode="None"
+                        Margin="15,0">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Note">
-                    <!-- Use a Border for the modern card view -->
-                    <Border Stroke="#E0E0E0"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 12"
+                    <Border Stroke="Transparent"
+                            StrokeThickness="0"
                             BackgroundColor="White"
-                            Padding="15"
-                            Margin="10">
+                            Padding="20"
+                            Margin="0,5,0,10">
                         <Border.Shadow>
-                            <Shadow Brush="Black" Opacity="0.05" Radius="10" Offset="0,4" />
+                            <Shadow Brush="Black" Opacity="0.08" Radius="15" Offset="0,2" />
                         </Border.Shadow>
-                        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
-                            <Label Grid.Row="0" Text="{Binding Filename}" FontSize="20" FontAttributes="Bold" TextColor="#1A1A1A" />
-                            <Label Grid.Row="1" Text="{Binding Text}" MaxLines="2" LineBreakMode="TailTruncation" Margin="0,5,0,0" TextColor="#5A5A5A"/>
-                            <StackLayout Grid.Row="2" Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
-                                <!-- Use the page's BindingContext (the AllNotesViewModel) for commands -->
-                                <Button Text="Edit"
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        
+                        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="8">
+                            <!-- Title -->
+                            <Label Grid.Row="0" 
+                                   Text="{Binding Filename}" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#2C3E50" />
+                            
+                            <!-- Preview Text -->
+                            <Label Grid.Row="1" 
+                                   Text="{Binding Text}" 
+                                   MaxLines="3" 
+                                   LineBreakMode="TailTruncation" 
+                                   LineHeight="1.3"
+                                   FontSize="14"
+                                   TextColor="#7F8C8D"
+                                   Margin="0,4,0,0" />
+                            
+                            <!-- Action Buttons -->
+                            <Grid Grid.Row="2" 
+                                  ColumnDefinitions="*,*" 
+                                  ColumnSpacing="10" 
+                                  Margin="0,12,0,0">
+                                
+                                <Button Grid.Column="0"
+                                        Text="✏️ Edit"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoToNoteCommand}"
-                                        CommandParameter="{Binding .}" />
-                                <Button Text="Delete"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#3498DB"
+                                        TextColor="White"
+                                        CornerRadius="10"
+                                        FontSize="14"
+                                        FontAttributes="Bold"
+                                        HeightRequest="44" />
+                                
+                                <Button Grid.Column="1"
+                                        Text="🗑️ Delete"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteNoteCommand}"
                                         CommandParameter="{Binding .}"
-                                        BackgroundColor="Red" />
-                            </StackLayout>
+                                        BackgroundColor="#E74C3C"
+                                        TextColor="White"
+                                        CornerRadius="10"
+                                        FontSize="14"
+                                        FontAttributes="Bold"
+                                        HeightRequest="44" />
+                            </Grid>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Grid.Row="1" Text="Add New Note" Margin="20" Command="{Binding GoToAddNoteCommand}"/>
+        <!-- Add New Note Button -->
+        <Border Grid.Row="2" 
+                BackgroundColor="White" 
+                Padding="20" 
+                StrokeThickness="0"
+                Margin="0">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.1" Radius="15" Offset="0,-2" />
+            </Border.Shadow>
+            
+            <Button Text="➕ Add New Note" 
+                    Command="{Binding GoToAddNoteCommand}"
+                    BackgroundColor="#27AE60"
+                    TextColor="White"
+                    CornerRadius="12"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    HeightRequest="50" />
+        </Border>
     </Grid>
 </ContentPage>
