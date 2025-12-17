@@ -10,6 +10,8 @@ namespace NoteTakingApp.ViewModels;
 public partial class AllNotesViewModel : BaseViewModel
 {
     private readonly IJokeService _jokeService;
+    private readonly INoteService _noteService;
+    private readonly ISerializationService _serializationService;
     [ObservableProperty]
     private string _jokeOfTheDay = "Loading joke...";
     public ObservableCollection<Note> Notes { get; } = new();
@@ -17,9 +19,11 @@ public partial class AllNotesViewModel : BaseViewModel
     [ObservableProperty]
     private bool _isEmpty;
 
-    public AllNotesViewModel(IJokeService jokeService)
+    public AllNotesViewModel(IJokeService jokeService, INoteService noteService, ISerializationService serializationService)
     {
         _jokeService = jokeService;
+        _noteService = noteService;
+        _serializationService = serializationService;
         Notes.CollectionChanged += (s, e) => IsEmpty = Notes.Count == 0;
         GetJokeCommand.Execute(null);
     }

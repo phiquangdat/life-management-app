@@ -24,15 +24,17 @@ public static class MauiProgram
         builder.Services.AddHttpClient();
 
         builder.Services.AddSingleton<IJokeService, JokeService>();
+        builder.Services.AddSingleton<INoteService, NoteService>();
+        builder.Services.AddSingleton<ISerializationService, SerializationService>();
 
         // Singleton services are created once for the entire app lifetime.
         // This is suitable for your main page and its ViewModel.
-        builder.Services.AddSingleton<AllNotesViewModel>();
         builder.Services.AddSingleton<AllNotesPage>();
 
         // Transient services are created fresh every time they are needed.
         // This is essential for the note editing page, so you get a
         // clean, new instance each time you create or edit a note.
+        builder.Services.AddTransient<AllNotesViewModel>();
         builder.Services.AddTransient<NoteViewModel>();
         builder.Services.AddTransient<NotePage>();
 
