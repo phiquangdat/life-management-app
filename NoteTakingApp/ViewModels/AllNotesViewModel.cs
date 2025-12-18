@@ -86,9 +86,36 @@ public partial class AllNotesViewModel : BaseViewModel
             _allNotes = sortedNotes;
 
             IncomingTasks.Clear();
-            foreach (var note in _allNotes.Where(n => n.Date.Date >= DateTime.Today && n.Date.Date <= DateTime.Today.AddDays(7)))
+            var tasksPath = Path.Combine(FileSystem.AppDataDirectory, "Tasks");
+            if (Directory.Exists(tasksPath))
             {
-                IncomingTasks.Add(note);
+                var taskFiles = Directory.GetFiles(tasksPath, "*.txt");
+                foreach (var file in taskFiles)
+                {
+                    var fileInfo = new FileInfo(file);
+                    var content = await File.ReadAllTextAsync(file);
+                    
+                    Note note;
+                    try
+                    {
+                         note = _serializationService.Deserialize<Note>(content);
+                         if (note == null) throw new Exception();
+                    }
+                    catch
+                    {
+                        note = new Note
+                        {
+                            Filename = Path.GetFileNameWithoutExtension(file),
+                            Text = content,
+                            Date = fileInfo.LastWriteTime
+                        };
+                    }
+
+                    if (note.Date.Date >= DateTime.Today && note.Date.Date <= DateTime.Today.AddDays(7))
+                    {
+                        IncomingTasks.Add(note);
+                    }
+                }
             }
 
             OnSearchQueryChanged(SearchQuery);
@@ -140,6 +167,12 @@ public partial class AllNotesViewModel : BaseViewModel
     private async Task GoToAllNotes()
     {
         await Shell.Current.GoToAsync($"{nameof(AllNotesPage)}");
+    }
+
+    [RelayCommand]
+    private async Task GoToToDoList()
+    {
+        await Shell.Current.GoToAsync($"{nameof(ToDoListPage)}");
     }
 
     [RelayCommand]

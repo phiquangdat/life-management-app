@@ -39,6 +39,10 @@ public static class MauiProgram
         builder.Services.AddTransient<AllNotesPage>();
         builder.Services.AddTransient<NoteDetailsViewModel>();
         builder.Services.AddTransient<NoteDetailsPage>();
+        builder.Services.AddTransient<ToDoListViewModel>();
+        builder.Services.AddTransient<ToDoListPage>();
+        builder.Services.AddTransient<AddTaskViewModel>();
+        builder.Services.AddTransient<AddTaskPage>();
 
         return builder.Build();
     }

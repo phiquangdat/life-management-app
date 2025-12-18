@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NoteTakingApp.ViewModels"
+             xmlns:models="clr-namespace:NoteTakingApp.Models"
+             x:DataType="vm:ToDoListViewModel"
+             x:Class="NoteTakingApp.Views.ToDoListPage"
+             Title="To-Do List"
+             BackgroundColor="#F8FAFC">
+
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="20" Padding="20">
+                <Label Text="My Tasks" 
+                       FontSize="32" 
+                       FontAttributes="Bold" 
+                       TextColor="#1E293B"/>
+
+                <CollectionView ItemsSource="{Binding Tasks}"
+                                SelectionMode="None">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,50,0,0">
+                            <Label Text="📝" FontSize="48" HorizontalOptions="Center"/>
+                            <Label Text="No active tasks" 
+                                   FontSize="20" 
+                                   HorizontalOptions="Center"
+                                   TextColor="#64748B"/>
+                            <Label Text="Tap + to add a new task" 
+                                   FontSize="14" 
+                                   HorizontalOptions="Center"
+                                   TextColor="#94A3B8"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Note">
+                            <Border StrokeThickness="0"
+                                    BackgroundColor="White"
+                                    Padding="16"
+                                    Margin="0,0,0,12">
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ToDoListViewModel}}, Path=GoToTaskDetailsCommand}"
+                                                          CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                                
+                                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12">
+                                    <Border Grid.Column="0"
+                                            HeightRequest="24"
+                                            WidthRequest="24"
+                                            Stroke="#CBD5E1"
+                                            StrokeThickness="2"
+                                            BackgroundColor="Transparent"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="6" />
+                                        </Border.StrokeShape>
+                                    </Border>
+                                    
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                        <Label Text="{Binding Filename}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="#1E293B"/>
+                                        <Label Text="{Binding Date, StringFormat='Due: {0:MMM dd}'}" 
+                                               FontSize="12" 
+                                               TextColor="#EF4444"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <Label Grid.Column="2" 
+                                           Text="Active" 
+                                           FontSize="11" 
+                                           TextColor="#3B82F6"
+                                           BackgroundColor="#EFF6FF"
+                                           Padding="8,4"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="End">
+                                        <Label.Resources>
+                                            <Style TargetType="Label">
+                                                <Setter Property="VisualStateManager.VisualStateGroups">
+                                                    <VisualStateGroupList>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="Normal" />
+                                                        </VisualStateGroup>
+                                                    </VisualStateGroupList>
+                                                </Setter>
+                                            </Style>
+                                        </Label.Resources>
+                                    </Label>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button Text="+"
+                Command="{Binding AddTaskCommand}"
+                FontSize="32"
+                TextColor="White"
+                BackgroundColor="#6366F1"
+                CornerRadius="28"
+                HeightRequest="56"
+                WidthRequest="56"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="20">
+            <Button.Shadow>
+                <Shadow Brush="#6366F1" Opacity="0.4" Radius="10" Offset="0,4"/>
+            </Button.Shadow>
+        </Button>
+    </Grid>
+</ContentPage>
