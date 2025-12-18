@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NoteTakingApp.ViewModels"
+             x:DataType="vm:AllNotesViewModel"
+             x:Class="NoteTakingApp.Views.MainPage">
+    <VerticalStackLayout Spacing="20" VerticalOptions="Center">
+        <Label Text="Life Management App" 
+               FontSize="32"
+               HorizontalOptions="Center" />
+               <Border Grid.Row="2" 
+                StrokeThickness="0" 
+                BackgroundColor="White"
+                Padding="20,18" 
+                Margin="20,16,20,10">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.08" Radius="18" Offset="0,3" />
+            </Border.Shadow>
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="18" />
+            </Border.StrokeShape>
+            
+            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="12">
+                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                    <Border Grid.Column="0"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            BackgroundColor="#FEF3C7"
+                            StrokeThickness="0"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <Label Text="💡"
+                               FontSize="20"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Border>
+
+                    <Border StrokeThickness="0" 
+                    BackgroundColor="White"
+                    Padding="20" 
+                    Margin="20,10">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.08" Radius="18" Offset="0,3" />
+                </Border.Shadow>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="18" />
+                </Border.StrokeShape>
+
+                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                    <Border Grid.Column="0"
+                            HeightRequest="70"
+                            WidthRequest="70"
+                            BackgroundColor="#E0F2FE"
+                            StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18" />
+                        </Border.StrokeShape>
+                        <Label Text="{Binding CurrentDate, StringFormat='{0:dd}'}"
+                               FontSize="32"
+                               FontAttributes="Bold"
+                               TextColor="#0284C7"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                        <Label Text="Today is" 
+                            FontSize="14" 
+                            TextColor="#64748B"/>
+                        <Label Text="{Binding CurrentDate, StringFormat='{0:dddd, MMMM yyyy}'}"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="#334155"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+                    
+            <Label Grid.Column="1"
+                   Text="Joke of the Day" 
+                   FontSize="17" 
+                   FontAttributes="Bold" 
+                   TextColor="#1E293B"
+                   VerticalOptions="Center" />
+            </Grid>
+                
+            <BoxView Grid.Row="1"
+                     HeightRequest="1"
+                     BackgroundColor="#E2E8F0"
+                     Margin="0,4,0,4" />
+                
+            <Label Grid.Row="2" 
+                   Text="{Binding JokeOfTheDay}" 
+                   FontSize="14" 
+                   LineHeight="1.4"
+                   TextColor="#5A6C7D" />
+                
+            <Button Grid.Row="3" 
+                    Text="Get New Joke" 
+                    Command="{Binding GetJokeCommand}" 
+                    HorizontalOptions="End"
+                    BackgroundColor="#3498DB"
+                    Margin="0,16,0,0"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="16,8"
+                    FontSize="13"
+                    FontAttributes="Bold" />
+            </Grid>
+        </Border>
+        <Button Text="To-do List" 
+                HorizontalOptions="Center"
+                Command="{Binding GoToAllNotesCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

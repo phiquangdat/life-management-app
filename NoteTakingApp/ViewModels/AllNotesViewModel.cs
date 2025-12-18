@@ -14,7 +14,34 @@ public partial class AllNotesViewModel : BaseViewModel
     private readonly ISerializationService _serializationService;
     [ObservableProperty]
     private string _jokeOfTheDay = "Loading joke...";
+    [ObservableProperty]
+    private DateTime _currentDate;
+    private List<Note> _allNotes = new();
     public ObservableCollection<Note> Notes { get; } = new();
+
+    [ObservableProperty]
+    private string _searchQuery;
+
+    partial void OnSearchQueryChanged(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            Notes.Clear();
+            foreach (var note in _allNotes)
+            {
+                Notes.Add(note);
+            }
+        }
+        else
+        {
+            var filteredNotes = _allNotes.Where(n => n.Text.Contains(value, StringComparison.OrdinalIgnoreCase) || n.Filename.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+            Notes.Clear();
+            foreach (var note in filteredNotes)
+            {
+                Notes.Add(note);
+            }
+        }
+    }
 
     [ObservableProperty]
     private bool _isEmpty;
@@ -25,6 +52,7 @@ public partial class AllNotesViewModel : BaseViewModel
         _noteService = noteService;
         _serializationService = serializationService;
         Notes.CollectionChanged += (s, e) => IsEmpty = Notes.Count == 0;
+        CurrentDate = DateTime.Now;
         GetJokeCommand.Execute(null);
     }
 
@@ -51,13 +79,13 @@ public partial class AllNotesViewModel : BaseViewModel
                 });
             }
 
-            var sortedNotes = notesList.OrderByDescending(n => n.Date);
-            foreach (var note in sortedNotes)
-            {
-                Notes.Add(note);
-            }
+
+            var sortedNotes = notesList.OrderByDescending(n => n.Date).ToList();
+            _allNotes = sortedNotes;
+            OnSearchQueryChanged(SearchQuery);
         }
         catch (Exception ex)
+
         {
             await Shell.Current.DisplayAlert("Error", $"Failed to load notes: {ex.Message}", "OK");
         }
@@ -91,6 +119,11 @@ public partial class AllNotesViewModel : BaseViewModel
     {
         if (note == null) return;
         await Shell.Current.GoToAsync($"{nameof(NotePage)}?Filename={Uri.EscapeDataString(note.Filename)}");
+    }
+    [RelayCommand]
+    private async Task GoToAllNotes()
+    {
+        await Shell.Current.GoToAsync($"{nameof(AllNotesPage)}");
     }
 
     [RelayCommand]

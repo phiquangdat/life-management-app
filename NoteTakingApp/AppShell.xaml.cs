@@ -7,6 +7,7 @@ namespace NoteTakingApp
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(AllNotesPage), typeof(AllNotesPage));
             Routing.RegisterRoute(nameof(NotePage), typeof(NotePage));
         }
     }

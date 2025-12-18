@@ -8,7 +8,7 @@
 
     <ShellContent
         Title="Notes"
-        ContentTemplate="{DataTemplate local:Views.AllNotesPage}"
-        Route="AllNotesPage" />
+        ContentTemplate="{DataTemplate local:Views.MainPage}"
+        Route="MainPage" />
 
 </Shell>
