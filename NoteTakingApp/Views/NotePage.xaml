@@ -14,7 +14,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Title Entry: Binds to the 'Title' property in the ViewModel -->
         <Border Grid.Row="0" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#FF060404" Padding="10,5" Margin="0,10,0,0">
             <Entry Placeholder="Enter note title..."
                    Text="{Binding Title}"
@@ -23,7 +22,6 @@
                    FontAttributes="Bold" />
         </Border>
 
-        <!-- Note Editor: Binds to the 'Text' property in the ViewModel -->
         <Border Grid.Row="1" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="Black" Padding="10">
             <Editor Placeholder="Start writing your note..."
                     Text="{Binding Text}"
@@ -32,7 +30,6 @@
                     AutoSize="TextChanges" />
         </Border>
 
-        <!-- Action Buttons with Command Bindings -->
         <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="10">
             <Button Grid.Column="0" Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="#FF16212A" TextColor="White" />
             <Button Grid.Column="1" Text="Save" Command="{Binding SaveNoteCommand}" BackgroundColor="#28A745" TextColor="White" />

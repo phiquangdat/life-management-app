@@ -36,17 +36,60 @@
             <Grid RowDefinitions="Auto,Auto" RowSpacing="8">
                 <Label Grid.Row="0"
                        Text="My Notes"
-                       FontSize="32"
-                       FontAttributes="Bold"
+                           FontSize="32"
+                           FontAttributes="Bold"
                        TextColor="Black"
                        Margin="0,8,0,0" />
-                
+                    
                 <Label Grid.Row="1"
                        Text="Capture your thoughts and ideas"
                        FontSize="15"
                        TextColor="#000000"
                        Opacity="0.9" />
-            </Grid>
+                </Grid>
+
+                <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                        StrokeThickness="0" 
+                        BackgroundColor="White"
+                        Padding="12" 
+                        Margin="10,0,0,0"
+                        VerticalOptions="Center">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.05" Radius="10" Offset="0,2" />
+                    </Border.Shadow>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                        <Border Grid.Column="0"
+                                HeightRequest="44"
+                                WidthRequest="44"
+                                BackgroundColor="#E0F2FE"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+                            <Label Text="{Binding CurrentDate, StringFormat='{0:dd}'}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#0284C7"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0">
+                            <Label Text="Today" 
+                                   FontSize="12" 
+                                   TextColor="#64748B"/>
+                            <Label Text="{Binding CurrentDate, StringFormat='{0:MMM yyyy}'}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#334155"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
         </Border>
 
         <Border Grid.Row="1"
@@ -134,20 +177,7 @@
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10">
-                                    <Border Grid.Row="0"
-                                            HorizontalOptions="Start"
-                                            BackgroundColor="#F0F9FF"
-                                            Padding="10,4"
-                                            StrokeThickness="0">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="6" />
-                                        </Border.StrokeShape>
-                                        <Label Text="📌 Note"
-                                               FontSize="11"
-                                               FontAttributes="Bold"
-                                               TextColor="#0284C7" />
-                                    </Border>
+                                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
                                     
                                     <Label Grid.Row="1" 
                                            Text="{Binding Filename}" 
@@ -169,12 +199,7 @@
                                           ColumnDefinitions="*,Auto,Auto" 
                                           ColumnSpacing="8" 
                                           Margin="0,6,0,0">
-                                        
-                                        <Label Grid.Column="0"
-                                               Text="{Binding Date, StringFormat='🕒 {0:MMM dd, yyyy HH:mm}'}"
-                                               FontSize="12"
-                                               TextColor="#64748B"
-                                               VerticalOptions="Center" />
+
                                         
                                         <Border Grid.Column="1"
                                                 WidthRequest="44"
@@ -186,7 +211,7 @@
                                             </Border.StrokeShape>
                                             <Border.GestureRecognizers>
                                                 <TapGestureRecognizer 
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoToNoteCommand}"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditNoteCommand}"
                                                     CommandParameter="{Binding .}" />
                                             </Border.GestureRecognizers>
                                             <Label Text="✏️"

@@ -2,115 +2,180 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:NoteTakingApp.ViewModels"
+             xmlns:models="clr-namespace:NoteTakingApp.Models"
              x:DataType="vm:AllNotesViewModel"
              x:Class="NoteTakingApp.Views.MainPage">
-    <VerticalStackLayout Spacing="20" VerticalOptions="Center">
-        <Label Text="Life Management App" 
-               FontSize="32"
-               HorizontalOptions="Center" />
-               <Border Grid.Row="2" 
-                StrokeThickness="0" 
-                BackgroundColor="White"
-                Padding="20,18" 
-                Margin="20,16,20,10">
-            <Border.Shadow>
-                <Shadow Brush="Black" Opacity="0.08" Radius="18" Offset="0,3" />
-            </Border.Shadow>
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="18" />
-            </Border.StrokeShape>
-            
-            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="12">
-                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
-                    <Border Grid.Column="0"
-                            WidthRequest="40"
-                            HeightRequest="40"
-                            BackgroundColor="#FEF3C7"
-                            StrokeThickness="0"
-                            VerticalOptions="Center">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="10" />
-                        </Border.StrokeShape>
-                        <Label Text="💡"
-                               FontSize="20"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center" />
-                    </Border>
+    <ScrollView>
+        <VerticalStackLayout Spacing="24" Padding="20">
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Life Management App" 
+                           FontSize="32" 
+                           FontAttributes="Bold" />
+                </VerticalStackLayout>
+                
+                <Border Grid.Column="1" 
+                        StrokeThickness="0" 
+                        BackgroundColor="White"
+                        Padding="12" 
+                        VerticalOptions="Center" >
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.05" Radius="10" Offset="0,4" />
+                    </Border.Shadow>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
 
-                    <Border StrokeThickness="0" 
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">
+                        <Border Grid.Column="0"
+                                HeightRequest="46"
+                                WidthRequest="46"
+                                BackgroundColor="#E0F2FE"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+                            <Label Text="{Binding CurrentDate, StringFormat='{0:dd}'}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#0284C7"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0">
+                            <Label Text="Today" 
+                                   FontSize="12" 
+                                   TextColor="#64748B"/>
+                            <Label Text="{Binding CurrentDate, StringFormat='{0:MMM yyyy}'}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#334155"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <VerticalStackLayout Spacing="12">
+                <Label Text="Incoming Tasks" 
+                       FontSize="18" 
+                       FontAttributes="Bold" 
+                       TextColor="#75aaffff"/>
+                
+                <CollectionView ItemsSource="{Binding IncomingTasks}" 
+                                HeightRequest="120">
+                    <CollectionView.EmptyView>
+                         <Border BackgroundColor="White" 
+                                StrokeThickness="0" 
+                                Padding="20" 
+                                HeightRequest="100">
+                             <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+                             <Label Text="No active tasks for today 🎉" 
+                                   VerticalOptions="Center" 
+                                   HorizontalOptions="Center"
+                                   TextColor="#64748B"/>
+                         </Border>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Note">
+                            <Border StrokeThickness="0"
+                                    BackgroundColor="White"
+                                    Padding="16"
+                                    Margin="0,0,0,10">
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.05" Radius="10" Offset="0,2" />
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16" />
+                                </Border.StrokeShape>
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <Label Grid.Column="0" 
+                                           Text="📌" 
+                                           FontSize="16" 
+                                           VerticalOptions="Center"
+                                           Margin="0,0,12,0"/>
+                                    <Label Grid.Column="1" 
+                                           Text="{Binding Filename}" 
+                                           FontSize="16" 
+                                           TextColor="#1E293B"
+                                           VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <Border StrokeThickness="0" 
                     BackgroundColor="White"
-                    Padding="20" 
-                    Margin="20,10">
+                    Padding="20" >
                 <Border.Shadow>
                     <Shadow Brush="Black" Opacity="0.08" Radius="18" Offset="0,3" />
                 </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="18" />
+                    <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
-
-                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
-                    <Border Grid.Column="0"
-                            HeightRequest="70"
-                            WidthRequest="70"
-                            BackgroundColor="#E0F2FE"
-                            StrokeThickness="0">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="18" />
-                        </Border.StrokeShape>
-                        <Label Text="{Binding CurrentDate, StringFormat='{0:dd}'}"
-                               FontSize="32"
-                               FontAttributes="Bold"
-                               TextColor="#0284C7"
-                               HorizontalOptions="Center"
+                
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
+                    <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                        <Border Grid.Column="0"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                BackgroundColor="#FEF3C7"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Label Text="💡"
+                                   FontSize="20"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+                        
+                        <Label Grid.Column="1"
+                               Text="Joke of the Day" 
+                               FontSize="17" 
+                               FontAttributes="Bold" 
+                               TextColor="#1E293B"
                                VerticalOptions="Center" />
-                    </Border>
-
-                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                        <Label Text="Today is" 
-                            FontSize="14" 
-                            TextColor="#64748B"/>
-                        <Label Text="{Binding CurrentDate, StringFormat='{0:dddd, MMMM yyyy}'}"
-                            FontSize="18"
-                            FontAttributes="Bold"
-                            TextColor="#334155"/>
-                    </VerticalStackLayout>
+                    </Grid>
+                    
+                    <BoxView Grid.Row="1"
+                             HeightRequest="1"
+                             BackgroundColor="#E2E8F0"
+                             Margin="0,4,0,4" />
+                    
+                    <Label Grid.Row="2" 
+                           Text="{Binding JokeOfTheDay}" 
+                           FontSize="14" 
+                           LineHeight="1.4"
+                           TextColor="#5A6C7D" />
+                    <Button Grid.Row="3" 
+                            Text="Get New Joke" 
+                            Command="{Binding GetJokeCommand}" 
+                            HorizontalOptions="End"
+                            BackgroundColor="#3498DB"
+                            Margin="0,16,0,0"
+                            TextColor="White"
+                            CornerRadius="8"
+                            Padding="16,8"
+                            FontSize="13"
+                            FontAttributes="Bold" />
                 </Grid>
             </Border>
-                    
-            <Label Grid.Column="1"
-                   Text="Joke of the Day" 
-                   FontSize="17" 
-                   FontAttributes="Bold" 
-                   TextColor="#1E293B"
-                   VerticalOptions="Center" />
-            </Grid>
-                
-            <BoxView Grid.Row="1"
-                     HeightRequest="1"
-                     BackgroundColor="#E2E8F0"
-                     Margin="0,4,0,4" />
-                
-            <Label Grid.Row="2" 
-                   Text="{Binding JokeOfTheDay}" 
-                   FontSize="14" 
-                   LineHeight="1.4"
-                   TextColor="#5A6C7D" />
-                
-            <Button Grid.Row="3" 
-                    Text="Get New Joke" 
-                    Command="{Binding GetJokeCommand}" 
-                    HorizontalOptions="End"
-                    BackgroundColor="#3498DB"
-                    Margin="0,16,0,0"
+
+            <Button Text="To-do List" 
+                    Command="{Binding GoToAllNotesCommand}"
+                    BackgroundColor="#6366F1"
                     TextColor="White"
-                    CornerRadius="8"
-                    Padding="16,8"
-                    FontSize="13"
-                    FontAttributes="Bold" />
-            </Grid>
-        </Border>
-        <Button Text="To-do List" 
-                HorizontalOptions="Center"
-                Command="{Binding GoToAllNotesCommand}"/>
-    </VerticalStackLayout>
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    HeightRequest="50"
+                    Margin="0,10,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

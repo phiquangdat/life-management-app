@@ -18,6 +18,8 @@ public partial class AllNotesViewModel : BaseViewModel
     private DateTime _currentDate;
     private List<Note> _allNotes = new();
     public ObservableCollection<Note> Notes { get; } = new();
+    public ObservableCollection<Note> IncomingTasks { get; } = new();
+
 
     [ObservableProperty]
     private string _searchQuery;
@@ -82,6 +84,13 @@ public partial class AllNotesViewModel : BaseViewModel
 
             var sortedNotes = notesList.OrderByDescending(n => n.Date).ToList();
             _allNotes = sortedNotes;
+
+            IncomingTasks.Clear();
+            foreach (var note in _allNotes.Where(n => n.Date.Date >= DateTime.Today && n.Date.Date <= DateTime.Today.AddDays(7)))
+            {
+                IncomingTasks.Add(note);
+            }
+
             OnSearchQueryChanged(SearchQuery);
         }
         catch (Exception ex)
@@ -115,10 +124,17 @@ public partial class AllNotesViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task GoToNote(Note note)
+    private async Task EditNote(Note note)
     {
         if (note == null) return;
         await Shell.Current.GoToAsync($"{nameof(NotePage)}?Filename={Uri.EscapeDataString(note.Filename)}");
+    }
+
+    [RelayCommand]
+    private async Task GoToNote(Note note)
+    {
+        if (note == null) return;
+        await Shell.Current.GoToAsync($"{nameof(NoteDetailsPage)}?Filename={Uri.EscapeDataString(note.Filename)}");
     }
     [RelayCommand]
     private async Task GoToAllNotes()

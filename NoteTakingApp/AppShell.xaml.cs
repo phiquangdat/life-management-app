@@ -9,6 +9,7 @@ namespace NoteTakingApp
             InitializeComponent();
             Routing.RegisterRoute(nameof(AllNotesPage), typeof(AllNotesPage));
             Routing.RegisterRoute(nameof(NotePage), typeof(NotePage));
+            Routing.RegisterRoute(nameof(NoteDetailsPage), typeof(NoteDetailsPage));
         }
     }
 }
