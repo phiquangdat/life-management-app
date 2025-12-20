@@ -9,87 +9,155 @@
              BackgroundColor="#F8FAFC">
 
     <Grid>
+
         <ScrollView>
             <VerticalStackLayout Spacing="20" Padding="20">
-                <Label Text="My Tasks" 
-                       FontSize="32" 
-                       FontAttributes="Bold" 
+
+                <Label Text="My Tasks"
+                       FontSize="32"
+                       FontAttributes="Bold"
                        TextColor="#1E293B"/>
 
                 <CollectionView ItemsSource="{Binding Tasks}"
                                 SelectionMode="None">
+
                     <CollectionView.EmptyView>
-                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,50,0,0">
-                            <Label Text="📝" FontSize="48" HorizontalOptions="Center"/>
-                            <Label Text="No active tasks" 
-                                   FontSize="20" 
-                                   HorizontalOptions="Center"
+                        <VerticalStackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center"
+                                             Spacing="10"
+                                             Margin="0,50,0,0">
+                            <Label Text="📝" FontSize="48"/>
+                            <Label Text="No active tasks"
+                                   FontSize="20"
                                    TextColor="#64748B"/>
-                            <Label Text="Tap + to add a new task" 
-                                   FontSize="14" 
-                                   HorizontalOptions="Center"
+                            <Label Text="Tap + to add a new task"
+                                   FontSize="14"
                                    TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </CollectionView.EmptyView>
+
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:Note">
+
                             <Border StrokeThickness="0"
                                     BackgroundColor="White"
                                     Padding="16"
                                     Margin="0,0,0,12">
+
                                 <Border.Shadow>
-                                    <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                                    <Shadow Brush="Black"
+                                            Opacity="0.05"
+                                            Radius="8"
+                                            Offset="0,2"/>
                                 </Border.Shadow>
+
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12" />
+                                    <RoundRectangle CornerRadius="12"/>
                                 </Border.StrokeShape>
+
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ToDoListViewModel}}, Path=GoToTaskDetailsCommand}"
-                                                          CommandParameter="{Binding .}"/>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.GoToTaskDetailsCommand,
+                                                  Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                        CommandParameter="{Binding .}"/>
                                 </Border.GestureRecognizers>
-                                
-                                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12">
+
+                                <Grid ColumnDefinitions="Auto, *, Auto"
+                                      ColumnSpacing="12">
+
                                     <Border Grid.Column="0"
-                                            HeightRequest="24"
-                                            WidthRequest="24"
-                                            Stroke="#CBD5E1"
+                                            HeightRequest="26"
+                                            WidthRequest="26"
                                             StrokeThickness="2"
-                                            BackgroundColor="Transparent"
-                                            VerticalOptions="Center">
+                                            VerticalOptions="Center"
+                                            BackgroundColor="Transparent">
+
                                         <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="6" />
+                                            <RoundRectangle CornerRadius="8"/>
                                         </Border.StrokeShape>
-                                    </Border>
-                                    
-                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                        <Label Text="{Binding Filename}" 
-                                               FontSize="16" 
+
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding BindingContext.ToggleTaskCompletionCommand,
+                                                          Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}"/>
+                                        </Border.GestureRecognizers>
+
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border"
+                                                         Binding="{Binding IsCompleted}"
+                                                         Value="True">
+                                                <Setter Property="Stroke" Value="#3B82F6"/>
+                                                <Setter Property="BackgroundColor" Value="#3B82F6"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger TargetType="Border"
+                                                         Binding="{Binding IsCompleted}"
+                                                         Value="False">
+                                                <Setter Property="Stroke" Value="#CBD5E1"/>
+                                            </DataTrigger>
+                                        </Border.Triggers>
+
+                                        <Label Text="✓"
+                                               TextColor="White"
+                                               FontSize="16"
                                                FontAttributes="Bold"
-                                               TextColor="#1E293B"/>
-                                        <Label Text="{Binding Date, StringFormat='Due: {0:MMM dd}'}" 
-                                               FontSize="12" 
-                                               TextColor="#EF4444"/>
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               IsVisible="{Binding IsCompleted}"/>
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         VerticalOptions="Center"
+                                                         Spacing="2">
+
+                                        <Label Text="{Binding Filename}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#1E293B">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding IsCompleted}"
+                                                             Value="True">
+                                                    <Setter Property="TextDecorations"
+                                                            Value="Strikethrough"/>
+                                                    <Setter Property="TextColor"
+                                                            Value="#94A3B8"/>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+
+                                        <Label Text="{Binding Date, StringFormat='Due: {0:MMM dd}'}"
+                                               FontSize="12"
+                                               TextColor="#EF4444">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding IsCompleted}"
+                                                             Value="True">
+                                                    <Setter Property="TextColor"
+                                                            Value="#CBD5E1"/>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
                                     </VerticalStackLayout>
-                                    
-                                    <Label Grid.Column="2" 
-                                           Text="Active" 
-                                           FontSize="11" 
+
+                                    <Label Grid.Column="2"
+                                           Text="Active"
+                                           FontSize="11"
                                            TextColor="#3B82F6"
                                            BackgroundColor="#EFF6FF"
                                            Padding="8,4"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="End">
-                                        <Label.Resources>
-                                            <Style TargetType="Label">
-                                                <Setter Property="VisualStateManager.VisualStateGroups">
-                                                    <VisualStateGroupList>
-                                                        <VisualStateGroup x:Name="CommonStates">
-                                                            <VisualState x:Name="Normal" />
-                                                        </VisualStateGroup>
-                                                    </VisualStateGroupList>
-                                                </Setter>
-                                            </Style>
-                                        </Label.Resources>
+                                           VerticalOptions="Center">
+
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                                         Binding="{Binding IsCompleted}"
+                                                         Value="True">
+                                                <Setter Property="Text" Value="Done"/>
+                                                <Setter Property="TextColor" Value="#10B981"/>
+                                                <Setter Property="BackgroundColor" Value="#ECFDF5"/>
+                                            </DataTrigger>
+                                        </Label.Triggers>
                                     </Label>
                                 </Grid>
                             </Border>
@@ -111,7 +179,10 @@
                 VerticalOptions="End"
                 Margin="20">
             <Button.Shadow>
-                <Shadow Brush="#6366F1" Opacity="0.4" Radius="10" Offset="0,4"/>
+                <Shadow Brush="#6366F1"
+                        Opacity="0.4"
+                        Radius="10"
+                        Offset="0,4"/>
             </Button.Shadow>
         </Button>
     </Grid>

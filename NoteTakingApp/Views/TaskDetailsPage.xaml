@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:NoteTakingApp.ViewModels"
+             x:DataType="viewModels:TaskDetailsViewModel"
+             x:Class="NoteTakingApp.Views.TaskDetailsPage"
+             BackgroundColor="#F8FAFC">
+
+    <Grid RowDefinitions="Auto, *"
+          Padding="24,20"
+          RowSpacing="20">
+
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto">
+
+            <Border StrokeThickness="0"
+                    BackgroundColor="White"
+                    Padding="12"
+                    HorizontalOptions="Start">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.05"
+                            Radius="10"
+                            Offset="0,2" />
+                </Border.Shadow>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+                </Border.GestureRecognizers>
+
+                <Label Text="←"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#1E293B" />
+            </Border>
+
+            <Button Grid.Column="2"
+                    Text="Edit"
+                    Command="{Binding EditTaskCommand}"
+                    TextColor="#3B82F6"
+                    BackgroundColor="Transparent"
+                    FontAttributes="Bold" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="16">
+
+                <Grid ColumnDefinitions="Auto, *"
+                      ColumnSpacing="16">
+
+                    <Border Grid.Column="0"
+                            HeightRequest="32"
+                            WidthRequest="32"
+                            StrokeThickness="2"
+                            VerticalOptions="Start"
+                            Margin="0,4,0,0"
+                            BackgroundColor="Transparent">
+
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleCompletionCommand}" />
+                        </Border.GestureRecognizers>
+
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border"
+                                         Binding="{Binding IsCompleted}"
+                                         Value="True">
+                                <Setter Property="Stroke" Value="#3B82F6" />
+                                <Setter Property="BackgroundColor" Value="#3B82F6" />
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="Border"
+                                         Binding="{Binding IsCompleted}"
+                                         Value="False">
+                                <Setter Property="Stroke" Value="#CBD5E1" />
+                            </DataTrigger>
+                        </Border.Triggers>
+
+                        <Label Text="✓"
+                               TextColor="White"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               IsVisible="{Binding IsCompleted}" />
+                    </Border>
+
+                    <Label Grid.Column="1"
+                           Text="{Binding Title}"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="#1E293B">
+
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding IsCompleted}"
+                                         Value="True">
+                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                <Setter Property="TextColor" Value="#94A3B8" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Grid>
+
+                <Label Text="{Binding Date, StringFormat='Due: {0:MMM dd, yyyy}'}"
+                       FontSize="13"
+                       TextColor="#94A3B8" />
+
+                <BoxView HeightRequest="1"
+                         Color="#E2E8F0" />
+
+                <Label Text="{Binding Text}"
+                       FontSize="16"
+                       TextColor="#475569"
+                       LineHeight="1.5" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

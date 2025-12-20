@@ -81,6 +81,37 @@ public partial class ToDoListViewModel : BaseViewModel
     private async Task GoToTaskDetails(Note note)
     {
         if (note == null) return;
-        await Shell.Current.GoToAsync($"{nameof(NoteDetailsPage)}?Filename={Uri.EscapeDataString(note.Filename)}");
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "Filename", note.Filename }
+        };
+        await Shell.Current.GoToAsync(nameof(TaskDetailsPage), navigationParameter);
+    }
+    [RelayCommand]
+    private async Task ToggleTaskCompletion(Note note)
+    {
+        if (note == null) return;
+
+        try
+        {
+            note.IsCompleted = !note.IsCompleted;
+
+            var appDataPath = Path.Combine(FileSystem.AppDataDirectory, "Tasks");
+            var filename = $"{note.Filename}.txt";
+            var filePath = Path.Combine(appDataPath, filename);
+
+            if (File.Exists(filePath))
+            {
+                var json = _serializationService.Serialize(note);
+                await File.WriteAllTextAsync(filePath, json);
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert(
+                "Error",
+                $"Failed to update task: {ex.Message}",
+                "OK");
+        }
     }
 }

@@ -163,6 +163,17 @@ public partial class AllNotesViewModel : BaseViewModel
         if (note == null) return;
         await Shell.Current.GoToAsync($"{nameof(NoteDetailsPage)}?Filename={Uri.EscapeDataString(note.Filename)}");
     }
+
+    [RelayCommand]
+    private async Task GoToTaskDetails(Note note)
+    {
+        if (note == null) return;
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "Filename", note.Filename }
+        };
+        await Shell.Current.GoToAsync(nameof(TaskDetailsPage), navigationParameter);
+    }
     [RelayCommand]
     private async Task GoToAllNotes()
     {

@@ -12,6 +12,7 @@ namespace NoteTakingApp
             Routing.RegisterRoute(nameof(NoteDetailsPage), typeof(NoteDetailsPage));
             Routing.RegisterRoute(nameof(ToDoListPage), typeof(ToDoListPage));
             Routing.RegisterRoute(nameof(AddTaskPage), typeof(AddTaskPage));
+            Routing.RegisterRoute(nameof(TaskDetailsPage), typeof(TaskDetailsPage));
         }
     }
 }
